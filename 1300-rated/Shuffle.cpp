@@ -124,8 +124,28 @@ void solve()
             }
         }
         else{
-            L=min(L,pr[i].first);
-            R=max(R,pr[i].second);
+            if(pr[i].first>R || pr[i].second<L){
+                continue;
+            }
+            else{
+                if(pr[i].first<L){
+                    L=pr[i].first;
+                    if(pr[i].second>R){
+                        R=pr[i].second;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                else{
+                    if(pr[i].second>R){
+                        R=pr[i].second;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+            }
         }
     }
     cout<<R-L+1<<endl;
