@@ -1,0 +1,25 @@
+# VS Code
+.vscode/
+
+# Build artifacts
+*.exe
+*.out
+*.o
+*.obj
+
+# Binaries / libs
+*.a
+*.so
+*.dll
+
+# Common folders
+/build/
+/bin/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
