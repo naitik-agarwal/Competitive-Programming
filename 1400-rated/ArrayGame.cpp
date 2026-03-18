@@ -115,66 +115,57 @@ void solve()
 {
     int n, k;
     cin >> n >> k;
-    map<int, int> freq;
     vector<int> a(n);
-    int twochecker = 0;
     for (int i = 0; i < n; i++)
     {
         cin >> a[i];
-        freq[a[i]]++;
-        if (freq[a[i]] > 1)
-        {
-            twochecker = 1;
-        }
     }
-    if (twochecker == 1)
-    {
-        cout << 0 << endl;
-        return;
-    }
-    int ans = *min_element(all(a));
-    if (k >= 3)
+    if (k > 2)
     {
         cout << 0 << endl;
         return;
     }
     else if (k == 1)
     {
-        for (int i = 0; i < n - 1; i++)
+        sort(all(a));
+        int ans = a[0];
+        for (int i = 1; i < n; i++)
         {
-            for (int j = i + 1; j < n; j++)
-            {
-                int r = abs(a[i] - a[j]);
-                ans = min(ans, r);
-            }
+            ans = min(ans, abs(a[i] - a[i - 1]));
         }
         cout << ans << endl;
     }
     else
     {
-        set<int> ff;
-        for (int i = 0; i < n - 1; i++)
+        // k==2 case
+        multiset<int> ms;
+        for (int i = 0; i < n; i++)
+        {
+            ms.insert(a[i]);
+        }
+        int ans = *min_element(all(a));
+        for (int i = 0; i < n; i++)
         {
             for (int j = i + 1; j < n; j++)
             {
-                int r = abs(a[i] - a[j]);
-                ans = min(ans, r);
-                if (freq[r] == 1)
+                int diff = abs(a[i] - a[j]);
+                ans = min(ans, diff);
+                auto it = ms.insert(diff);
+                if (it != ms.begin())
                 {
-                    twochecker = 1;
+                    ans = min(ans, abs(*it - *prev(it)));
+                }
+                auto nxt = next(it);
+                if (nxt != ms.end())
+                {
+                    ans = min(ans, abs(*nxt - *it));
+                }
+                if (ans == 0)
+                {
                     break;
                 }
-                ff.insert(r);
+                ms.erase(it);
             }
-        }
-        if (twochecker == 1)
-        {
-            cout << 0 << endl;
-            return;
-        }
-        for (int it : ff)
-        {
-            // auto it=lower_bound(all(a),abs(it-))
         }
         cout << ans << endl;
     }

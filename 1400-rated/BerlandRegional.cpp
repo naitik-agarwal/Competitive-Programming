@@ -113,6 +113,66 @@ void fast_io()
 
 void solve()
 {
+    int n;
+    cin >> n;
+    vector<int> u(n), s(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> u[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cin >> s[i];
+    }
+    vector<int> ans(n + 1, 0);
+    vector<pair<int, vector<int>>> grid(n + 1);
+    for (int i = 0; i < n + 1; i++)
+    {
+        grid[i].first = 0;
+        vector<int> temp;
+        grid[i].second = temp;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        grid[u[i]].first++;
+        grid[u[i]].second.push_back(s[i]);
+    }
+    sort(rall(grid));
+    for (int i = 0; i < n + 1; i++)
+    {
+        sort(rall(grid[i].second));
+    }
+    vector<vector<int>> presum(n + 1);
+    for (int i = 0; i < n + 1; i++)
+    {
+        if (grid[i].second.size() == 0)
+        {
+            break;
+        }
+        else
+        {
+            int sm = 0;
+            for (int j = 0; j < grid[i].second.size(); j++)
+            {
+                sm += grid[i].second[j];
+                presum[i].push_back(sm);
+            }
+        }
+    }
+    for (int i = 1; i < n + 1; i++)
+    {
+        int j = 0;
+        while (grid[j].first >= i)
+        {
+            ans[i] += presum[j][((grid[j].first) / i * i) - 1];
+            j++;
+        }
+    }
+    for (int i = 1; i < n + 1; i++)
+    {
+        cout << ans[i] << " ";
+    }
+    cout << endl;
 }
 
 signed main()

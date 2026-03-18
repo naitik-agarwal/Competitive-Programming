@@ -123,32 +123,63 @@ void solve()
     int q;
     cin >> q;
     // Precompute:
-    vector<vector<int>> grid(n);
-    for (int i = 0; i < n; i++)
+    vector<vector<pair<int, int>>> grid(n);
+
+    for (int i = n - 1; i >= 0; i--)
     {
-        int num = a[i];
-        for (int j = i; j < n; j++)
+        vector<pair<int, int>> cur;
+        cur.push_back({a[i], i});
+
+        if (i + 1 < n)
         {
-            num = (num & a[j]);
-            grid[i].push_back(num);
+            for (auto &p : grid[i + 1])
+            {
+                int val = (p.first & a[i]);
+                int r = p.second;
+
+                if (cur.back().first == val)
+                    cur.back().second = r;
+                else
+                    cur.push_back({val, r});
+            }
         }
-        reverse(all(grid[i]));
+        grid[i] = cur;
     }
+
     // Solve
     while (q--)
     {
         int l, k;
         cin >> l >> k;
-        auto it = lower_bound(all(grid[l - 1]), k);
-        int dis = distance(grid[l - 1].begin(), it);
-        if (dis == grid[l - 1].size())
+        if (a[l - 1] < k)
         {
             cout << -1 << " ";
+            continue;
         }
-        else
+        int checker = 0;
+        for (int i = 0; i < grid[l - 1].size(); i++)
         {
-            cout << n - dis << " ";
+            if (grid[l - 1][i].first < k)
+            {
+                cout << grid[l - 1][i - 1].second + 1 << " ";
+                checker = 1;
+                break;
+            }
         }
+        if (checker == 0)
+        {
+            cout << n << " ";
+        }
+        // auto it = lower_bound(all(grid[l - 1]), k);
+        // int dis = distance(grid[l - 1].begin(), it);
+        // if (dis == grid[l - 1].size())
+        // {
+        //     cout << -1 << " ";
+        // }
+        // else
+        // {
+        //     cout << n - dis << " ";
+        // }
     }
     cout << endl;
 }
