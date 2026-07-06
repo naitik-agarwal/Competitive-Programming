@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
@@ -19,7 +20,8 @@ using namespace __gnu_pbds;
 // find_by_order(k) -> iterator to k-th smallest (0-indexed)
 // order_of_key(x) -> number of elements < x
 template <typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+using ordered_set =
+    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 // Example for duplicates: ordered_set<pair<int,int>>
 
@@ -38,18 +40,15 @@ ll msub(ll a, ll b, ll mod) { return (a % mod - b % mod + mod) % mod; }
 ll mod_mul(ll a, ll b, ll mod) { return (a % mod * b % mod) % mod; }
 
 // Binary Exponentiation
-ll mpow(ll a, ll b, ll mod)
-{
-    ll res = 1;
-    a %= mod;
-    while (b)
-    {
-        if (b & 1)
-            res = res * a % mod;
-        a = a * a % mod;
-        b >>= 1;
-    }
-    return res;
+ll mpow(ll a, ll b, ll mod) {
+  ll res = 1;
+  a %= mod;
+  while (b) {
+    if (b & 1) res = res * a % mod;
+    a = a * a % mod;
+    b >>= 1;
+  }
+  return res;
 }
 
 // Modular Inverse (only if mod is Prime)
@@ -57,121 +56,94 @@ ll modinv(ll a, ll mod) { return mpow(a, mod - 2, mod); }
 
 // Factorials
 vector<ll> fact(N), inv_fact(N);
-void precompute_factorials(ll mod)
-{
-    fact[0] = 1;
-    for (ll i = 1; i < N; i++)
-    {
-        fact[i] = fact[i - 1] * i % mod;
-    }
-    inv_fact[N - 1] = modinv(fact[N - 1], mod);
-    for (ll i = N - 2; i >= 0; i--)
-    {
-        inv_fact[i] = inv_fact[i + 1] * (i + 1) % mod;
-    }
+void precompute_factorials(ll mod) {
+  fact[0] = 1;
+  for (ll i = 1; i < N; i++) {
+    fact[i] = fact[i - 1] * i % mod;
+  }
+  inv_fact[N - 1] = modinv(fact[N - 1], mod);
+  for (ll i = N - 2; i >= 0; i--) {
+    inv_fact[i] = inv_fact[i + 1] * (i + 1) % mod;
+  }
 }
 
 // nCr
-ll ncr(ll n, ll r, ll mod)
-{
-    if (n < r || r < 0)
-        return 0;
-    return fact[n] * inv_fact[r] % mod * inv_fact[n - r] % mod;
+ll ncr(ll n, ll r, ll mod) {
+  if (n < r || r < 0) return 0;
+  return fact[n] * inv_fact[r] % mod * inv_fact[n - r] % mod;
 }
 
 // Prime Checking
-bool is_prime(ll n)
-{
-    if (n < 2)
-        return false;
-    for (ll i = 2; i * i <= n; ++i)
-        if (n % i == 0)
-            return false;
-    return true;
+bool is_prime(ll n) {
+  if (n < 2) return false;
+  for (ll i = 2; i * i <= n; ++i)
+    if (n % i == 0) return false;
+  return true;
 }
 
 // Sieve of Eratosthenes
-vector<bool> sieve(ll n)
-{
-    vector<bool> is_prime(n + 1, true);
-    is_prime[0] = is_prime[1] = false;
-    for (ll i = 2; i * i <= n; ++i)
-    {
-        if (is_prime[i])
-            for (ll j = i * i; j <= n; j += i)
-                is_prime[j] = false;
-    }
-    return is_prime;
+vector<bool> sieve(ll n) {
+  vector<bool> is_prime(n + 1, true);
+  is_prime[0] = is_prime[1] = false;
+  for (ll i = 2; i * i <= n; ++i) {
+    if (is_prime[i])
+      for (ll j = i * i; j <= n; j += i) is_prime[j] = false;
+  }
+  return is_prime;
 }
 
 // Fast I/O
-void fast_io()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
+void fast_io() {
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
 }
 
-void solve()
-{
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int steps = 0;
-    vector<int> ans;
-    int zero = count(all(s), '0');
-    int one = n - zero;
-    if ((zero % 2 == 0 && one % 2 == 1))
-    {
-        cout << -1 << endl;
-        return;
-    }
-    else
-    {
-        if (zero % 2 == 1)
-        {
-            // all zero;
-            cout << zero << endl;
-            for (int i = 0; i < n; i++)
-            {
-                if (s[i] == '0')
-                {
-                    cout << i + 1 << " ";
-                }
-            }
-            if (zero > 0)
-            {
-                cout << endl;
-            }
+void solve() {
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
+  int steps = 0;
+  vector<int> ans;
+  int zero = count(all(s), '0');
+  int one = n - zero;
+  if ((zero % 2 == 0 && one % 2 == 1)) {
+    cout << -1 << endl;
+    return;
+  } else {
+    if (zero % 2 == 1) {
+      // all zero;
+      cout << zero << endl;
+      for (int i = 0; i < n; i++) {
+        if (s[i] == '0') {
+          cout << i + 1 << " ";
         }
-        else
-        {
-            cout << one << endl;
-            for (int i = 0; i < n; i++)
-            {
-                if (s[i] == '1')
-                {
-                    cout << i + 1 << " ";
-                }
-            }
-            if (one > 0)
-            {
-                cout << endl;
-            }
+      }
+      if (zero > 0) {
+        cout << endl;
+      }
+    } else {
+      cout << one << endl;
+      for (int i = 0; i < n; i++) {
+        if (s[i] == '1') {
+          cout << i + 1 << " ";
         }
+      }
+      if (one > 0) {
+        cout << endl;
+      }
     }
+  }
 }
 
-signed main()
-{
-    fast_io();
-    precompute_factorials(MOD);
+signed main() {
+  fast_io();
+  precompute_factorials(MOD);
 
-    ll t = 1;
-    cin >> t;
-    while (t--)
-    {
-        solve();
-    }
-    return 0;
+  ll t = 1;
+  cin >> t;
+  while (t--) {
+    solve();
+  }
+  return 0;
 }

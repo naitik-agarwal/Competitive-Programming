@@ -154,7 +154,26 @@ void fast_io() {
   cin.tie(NULL);
 }
 
-void solve() {}
+void solve() {
+  int n, x, y;
+  cin >> n >> x >> y;
+  vector<int> a(n);
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
+  }
+  int ans = a[0];
+  int s = 0;
+  for (int i = 0; i < n; i++) {
+    s += (a[i] / x * y);  // 8+4+4+4=20
+  }
+  for (int i = 0; i < n; i++) {
+    int temp = s;
+    temp -= (a[i] / x * y);  // 20-8=12
+    temp += a[i];
+    ans = max(ans, temp);
+  }
+  cout << ans << endl;
+}
 
 signed main() {
   fast_io();
